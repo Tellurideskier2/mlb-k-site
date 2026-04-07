@@ -306,10 +306,15 @@ bestBet,
       opponentAdjustment: round(opponentAdjustment, 3),
       projectedKs: round(projectedKs, 2),
       ksStdDevLast10: round(kStdDev, 2),
-      modelWinProbability: round(modelWinProb, 3),
-      impliedProbability: round(impliedProb, 3),
-      edge: round(percentileBucketDiff(modelWinProb, impliedProb), 3),
-      evPer100: round(evPer100, 2)
+      overProbability: round(pOver, 3),
+underProbability: round(pUnder, 3),
+impliedOverProbability: impliedOver !== null ? round(impliedOver, 3) : null,
+impliedUnderProbability: impliedUnder !== null ? round(impliedUnder, 3) : null,
+edgeOver: impliedOver !== null ? round(percentileBucketDiff(pOver, impliedOver), 3) : null,
+edgeUnder: impliedUnder !== null ? round(percentileBucketDiff(pUnder, impliedUnder), 3) : null,
+evOverPer100: evOver !== null ? round(evOver, 2) : null,
+evUnderPer100: evUnder !== null ? round(evUnder, 2) : null,
+bestBet
     },
     recentGames: last10.reverse()
   };
