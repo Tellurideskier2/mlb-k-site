@@ -57,3 +57,4 @@ This is intentionally simple and fast:
 - MLB public data endpoints can occasionally change.
 - Probable pitchers are not always posted early in the day, so opponent info may be missing.
 - This is a quick-screening tool, not a guaranteed pricing model.
+"# mlb-k-site" 
