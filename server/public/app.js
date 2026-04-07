@@ -93,8 +93,40 @@ function renderCards(results) {
       <h3>${r.pitcher.name}</h3>
       <p class="meta">${r.pitcher.team || '—'} vs ${r.matchup.opponent || 'TBD'} · ${r.matchup.venue || 'Venue TBD'}</p>
       <div class="statsGrid">
-        <div class="statBox"><span>Line</span><strong>${r.input.line}</strong></div>
-        <div class="statBox"><span>Odds</span><strong>${r.input.odds ?? '—'}</strong></div>
+        <div class="statBox"><span>Line</span><strong>${r.input.line}</strong><div class="statBox">
+  <span>Over %</span>
+  <strong>${r.input.overProb != null ? `${r.input.overProb}%` : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Under %</span>
+  <strong>${r.input.underProb != null ? `${r.input.underProb}%` : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Over Edge</span>
+  <strong>${r.input.edgeOver != null ? `${r.input.edgeOver}%` : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Under Edge</span>
+  <strong>${r.input.edgeUnder != null ? `${r.input.edgeUnder}%` : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Over EV / $100</span>
+  <strong>${r.input.evOver != null ? signed(r.input.evOver) : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Under EV / $100</span>
+  <strong>${r.input.evUnder != null ? signed(r.input.evUnder) : '—'}</strong>
+</div>
+
+<div class="statBox">
+  <span>Best Bet</span>
+  <strong>${r.input.bestBet ?? '—'}</strong>
+</div>
         <div class="statBox"><span>Season K/9</span><strong>${r.stats.seasonK9 ?? '—'}</strong></div>
         <div class="statBox"><span>Season K/IP</span><strong>${r.stats.seasonKPerInning ?? '—'}</strong></div>
         <div class="statBox"><span>Last 5 Avg K</span><strong>${r.stats.last5AvgKs ?? '—'}</strong></div>
