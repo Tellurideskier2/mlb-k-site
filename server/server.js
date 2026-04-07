@@ -347,18 +347,19 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, `http://localhost:${PORT}`);
 
     if (url.pathname === '/api/analyze' && req.method === 'GET') {
-      const { name, line, odds, date, season, innings } = parseQuery(req.url);
+      const { name, line, overOdds, underOdds, date, season, innings } = parseQuery(req.url);
       if (!name || !line) {
         return sendJson(res, 400, { error: 'Missing required query params: name and line' });
       }
       const result = await analyzePitcher({
-        name,
-        line,
-        odds,
-        date: date || new Date().toISOString().slice(0, 10),
-        season: season || new Date().getFullYear(),
-        inningsOverride: innings
-      });
+  name,
+  line,
+  overOdds,
+  underOdds,
+  date,
+  season,
+  inningsOverride: innings
+});
       return sendJson(res, 200, result);
     }
 
