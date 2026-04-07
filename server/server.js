@@ -192,7 +192,7 @@ function percentileBucketDiff(prob, implied) {
   return prob - implied;
 }
 
-async function analyzePitcher({ name, line, odds, date, season, inningsOverride }) {
+async function analyzePitcher({ name, line, overOdds, underOdds, date, season, inningsOverride }) {
   const pitcher = await searchPitcherByName(name);
   const opponentInfo = await getTodaysOpponentForPitcher(pitcher.id, date);
   const [seasonStats, gameLog] = await Promise.all([
@@ -234,9 +234,27 @@ async function analyzePitcher({ name, line, odds, date, season, inningsOverride 
 
   const projectedKs = seasonKPerInning * projectedInnings * opponentAdjustment;
   const kStdDev = Math.max(1.15, standardDeviation(last10Ks));
-  const modelWinProb = overProbability(Number(line), projectedKs, kStdDev);
-  const impliedProb = odds ? americanToImpliedProb(odds) : null;
-  const evPer100 = odds ? calculateEv(modelWinProb, Number(odds), 100) : null;
+  const pOver = overProbability(Number(line), projectedKs, kStdDev);
+const pUnder = 1 - pOver;
+
+// implied probabilities
+const impliedOver = overOdds ? americanToImpliedProb(overOdds) : null;
+const impliedUnder = underOdds ? americanToImpliedProb(underOdds) : null;
+
+// EV
+const evOver = overOdds ? calculateEv(pOver, Number(overOdds), 100) : null;
+const evUnder = underOdds ? calculateEv(pUnder, Number(underOdds), 100) : null;
+
+// edges
+const edgeOver = impliedOver !== null ? pOver - impliedOver : null;
+const edgeUnder = impliedUnder !== null ? pUnder - impliedUnder : null;
+
+// best bet
+let bestBet = "Pass";
+if (evOver !== null && evUnder !== null) {
+  if (evOver > 0 && evOver > evUnder) bestBet = "Over";
+  if (evUnder > 0 && evUnder > evOver) bestBet = "Under";
+}
   const lineNumber = Number(line);
 
   return {
@@ -258,7 +276,19 @@ async function analyzePitcher({ name, line, odds, date, season, inningsOverride 
     },
     input: {
       line: lineNumber,
-      odds: odds ? Number(odds) : null,
+      overOdds: overOdds ? Number(overOdds) : null,
+underOdds: underOdds ? Number(underOdds) : null,
+
+overProb: Number((pOver * 100).toFixed(1)),
+underProb: Number((pUnder * 100).toFixed(1)),
+
+evOver: evOver !== null ? Number(evOver.toFixed(2)) : null,
+evUnder: evUnder !== null ? Number(evUnder.toFixed(2)) : null,
+
+edgeOver: edgeOver !== null ? Number((edgeOver * 100).toFixed(1)) : null,
+edgeUnder: edgeUnder !== null ? Number((edgeUnder * 100).toFixed(1)) : null,
+
+bestBet,
       inningsOverride: inningsOverride ? Number(inningsOverride) : null
     },
     stats: {
@@ -342,7 +372,8 @@ const server = http.createServer(async (req, res) => {
               const result = await analyzePitcher({
                 name: input.name,
                 line: input.line,
-                odds: input.odds,
+                overOdds: input.overOdds,
+		underOdds: input.underOdds,
                 inningsOverride: input.innings,
                 date,
                 season
