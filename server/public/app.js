@@ -39,23 +39,31 @@ function renderSummary(results) {
   summaryTbody.innerHTML = '';
   for (const { result } of results.filter((r) => r.ok)) {
     const row = document.createElement('tr');
-    const evClass = result.stats.evPer100 > 0 ? 'good' : result.stats.evPer100 < 0 ? 'bad' : '';
-    const edgeClass = result.stats.edge > 0 ? 'good' : result.stats.edge < 0 ? 'bad' : '';
+    
     row.innerHTML = `
-      <td>${result.pitcher.name}</td>
-      <td>${result.matchup.opponent || '—'}</td>
-      <td>${result.input.line}</td>
-      <td>${result.input.odds ?? '—'}</td>
-      <td>${result.stats.last5AvgKs ?? '—'}</td>
-      <td>${pct(result.stats.last10HitRate)}</td>
-      <td>${result.stats.seasonK9 ?? '—'}</td>
-      <td>${result.stats.projectedInnings ?? '—'}</td>
-      <td>${pct(result.stats.opponentStrikeoutRate)}</td>
-      <td>${result.stats.projectedKs ?? '—'}</td>
-      <td>${pct(result.stats.modelWinProbability)}</td>
-      <td class="${evClass}">${signed(result.stats.evPer100)}</td>
-      <td class="${edgeClass}">${pct(result.stats.edge)}</td>
-    `;
+  <td>${result.pitcher.name}</td>
+  <td>${result.matchup.opponent || '—'}</td>
+  <td>${result.input.line}</td>
+
+  <td>
+    O: ${result.input.overOdds ?? '—'}<br>
+    U: ${result.input.underOdds ?? '—'}
+  </td>
+
+  <td>
+    O: ${result.input.evOver ?? '—'}<br>
+    U: ${result.input.evUnder ?? '—'}
+  </td>
+
+  <td>${result.input.bestBet ?? '—'}</td>
+
+  <td>${result.stats.last5AvgKs ?? '—'}</td>
+  <td>${pct(result.stats.last10HitRate)}</td>
+  <td>${result.stats.seasonK9 ?? '—'}</td>
+  <td>${result.stats.projectedInnings ?? '—'}</td>
+  <td>${pct(result.stats.opponentStrikeoutRate)}</td>
+  <td>${result.stats.projectedKs ?? '—'}</td>
+`;
     summaryTbody.appendChild(row);
   }
   summaryPanel.hidden = false;
