@@ -1,0 +1,12 @@
+{
+  "name": "mlb-k-prop-dashboard",
+  "version": "1.0.0",
+  "description": "Pitcher strikeout prop dashboard using MLB public stats endpoints",
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MLB Strikeout Prop Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>MLB Strikeout Prop Dashboard</h1>
+      <p>Paste pitchers and lines, then get recent form, season strikeout stats, opponent strikeout rate, a projected strikeout total, a model win probability, and EV if you add odds.</p>
+      <div class="note">
+        Format each line as: <strong>Pitcher Name, line, odds(optional), innings override(optional)</strong><br />
+        Example: <code>Spencer Strider, 7.5, -110, 6.1</code>
+      </div>
+    </section>
+
+    <section class="panel controls">
+      <div class="grid">
+        <label>
+          Date
+          <input id="dateInput" type="date" />
+        </label>
+        <label>
+          Season
+          <input id="seasonInput" type="number" min="2020" max="2100" step="1" />
+        </label>
+      </div>
+      <label>
+        Pitchers
+        <textarea id="pitchersInput" rows="8">Zack Wheeler, 6.5, -115
+Tarik Skubal, 7.5, +105
+Dylan Cease, 6.5, -120</textarea>
+      </label>
+      <div class="buttonRow">
+        <button id="analyzeBtn">Analyze</button>
+        <button id="sampleBtn" class="secondary">Load sample</button>
+      </div>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section class="panel" id="summaryPanel" hidden>
+      <h2>Quick Scan</h2>
+      <div class="tableWrap">
+        <table id="summaryTable">
+          <thead>
+            <tr>
+              <th>Pitcher</th>
+              <th>Opp</th>
+              <th>Line</th>
+              <th>Odds</th>
+              <th>Last 5 Avg K</th>
+              <th>Last 10 Hit%</th>
+              <th>K/9</th>
+              <th>Proj IP</th>
+              <th>Opp K%</th>
+              <th>Proj K</th>
+              <th>Win %</th>
+              <th>EV / $100</th>
+              <th>Edge</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="cards"></section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
