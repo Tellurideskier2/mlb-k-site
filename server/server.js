@@ -390,7 +390,13 @@ const server = http.createServer(async (req, res) => {
       });
       return;
     }
-
+if (req.url === '/' || req.url === '') {
+  const filePath = path.join(publicDir, 'index.html');
+  const content = await readFile(filePath);
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end(content);
+  return;
+}
     await serveStatic(req, res);
   } catch (error) {
     sendJson(res, 500, { error: error.message || 'Internal server error' });
